@@ -8,6 +8,7 @@
     "npm": "6.7.0"
   },
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "node index.js",
     "deploy": "git push heroku master"
   },
@@ -20,6 +21,7 @@
     "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "nodemon": "^1.18.9",
     "prettier": "^1.16.4"
   }
 }
