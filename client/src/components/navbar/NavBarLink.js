@@ -5,7 +5,7 @@ import { Menu } from 'semantic-ui-react';
 export default ({ to, children }) => {
   return (
     <Menu.Item>
-      <Link to={to}>{children}</Link>
+      {to ? <Link to={to}>{children}</Link> : <React.Fragment>{children}</React.Fragment>}
     </Menu.Item>
   );
 };

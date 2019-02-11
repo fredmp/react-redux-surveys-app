@@ -1,26 +1,38 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
-import { navBarLeftItems, navBarRightItems } from './uiHelpers';
-import NavBar from './NavBar';
+import * as actions from '../actions';
+import NavBar from './navbar';
+import Landing from './Landing';
+import Surveys from './Surveys';
 
-const App = () => {
-  return (
-    <div style={{ marginTop: '100px' }}>
-      <Container>
-        <Router>
-          <div>
-            <NavBar leftItems={navBarLeftItems} rightItems={navBarRightItems} />
-            <Switch>
-              <Route exact path="/" component={() => <h2>Landing</h2>} />
-              <Route path="/surveys" component={() => <h2>Dashboard</h2>} />
-            </Switch>
-          </div>
-        </Router>
-      </Container>
-    </div>
-  );
-};
+class App extends React.Component {
+  componentDidMount() {
+    this.props.fetchUser();
+  }
 
-export default App;
+  render() {
+    return (
+      <div style={{ marginTop: '100px' }}>
+        <Container>
+          <Router>
+            <div>
+              <NavBar />
+              <Switch>
+                <Route exact path="/" component={() => <Landing />} />
+                <Route path="/surveys" component={() => <Surveys />} />
+              </Switch>
+            </div>
+          </Router>
+        </Container>
+      </div>
+    );
+  }
+}
+
+export default connect(
+  null,
+  actions,
+)(App);
