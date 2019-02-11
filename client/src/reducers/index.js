@@ -10,7 +10,7 @@ const AUTH_INITIAL_STATE = {
 const auth = (state = AUTH_INITIAL_STATE, action) => {
   switch (action.type) {
     case FETCH_USER:
-      const user = _.pick(action.payload, 'id', 'googleId');
+      const user = _.pick(action.payload, 'id', 'googleId', 'credits');
       return { ...state, user, isSignedIn: !_.isEmpty(user) };
     default:
       return state;
