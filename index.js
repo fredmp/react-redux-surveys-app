@@ -5,7 +5,8 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const path = require('path');
 const bodyParser = require('body-parser');
-require('./models');
+require('./models/User');
+require('./models/Survey');
 require('./services/passport');
 
 const { PORT, MONGO_URI, COOKIE_KEY, NODE_ENV } = process.env;
