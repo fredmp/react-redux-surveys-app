@@ -1,3 +1,6 @@
+const _ = require('lodash');
+const { Path } = require('path-parser');
+const { URL } = require('url');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const stripe = require('stripe')(process.env.STRIPE_SK);
@@ -59,7 +62,6 @@ module.exports = app => {
       const template = surveyEmailTemplate(survey);
       const mailer = new Mailer(survey, template);
       await mailer.send();
-      await survey.save();
       req.user.credits -= 1;
       const user = await req.user.save();
       res.send(user);
@@ -68,5 +70,34 @@ module.exports = app => {
     }
   });
 
-  app.get('/api/surveys/thanks', (req, res) => res.send('Thanks for voting!'));
+  app.get('/api/surveys/:surveyId/:choice', (req, res) => res.send('Thanks for voting!'));
+
+  app.post('/api/surveys/webhooks', (req, res) => {
+    const pathRegex = new Path('/api/surveys/:surveyId/:choice');
+
+    _.chain(req.body)
+      .map(({ email, url }) => {
+        const match = pathRegex.test(new URL(url).pathname);
+        if (match) return { ...match, email };
+        return null;
+      })
+      .compact()
+      .uniqBy('email', 'surveyId')
+      .each(({ surveyId: _id, email, choice }) => {
+        Survey.updateOne(
+          {
+            _id,
+            recipients: { $elemMatch: { email, responded: false } },
+          },
+          {
+            $inc: { [choice]: 1 },
+            $set: { 'recipients.$.responded': true },
+            lastResponseAt: new Date(),
+          },
+        ).exec();
+      })
+      .value();
+
+    res.send({});
+  });
 };
