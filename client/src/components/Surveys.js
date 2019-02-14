@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
+import { Container, Button } from 'semantic-ui-react';
 
 class Surveys extends React.Component {
   componentDidUpdate() {
@@ -10,7 +11,13 @@ class Surveys extends React.Component {
   }
 
   render() {
-    return <h2>Surveys</h2>;
+    return (
+      <Container fluid>
+        <Link to="/surveys/new">
+          <Button circular icon="plus" color="blue" floated="right" size="big" />
+        </Link>
+      </Container>
+    );
   }
 }
 

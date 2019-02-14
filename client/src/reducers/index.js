@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { combineReducers } from 'redux';
+import { reducer as form } from 'redux-form';
 import { FETCH_USER } from '../actions/types';
 
 const AUTH_INITIAL_STATE = {
@@ -19,4 +20,5 @@ const auth = (state = AUTH_INITIAL_STATE, action) => {
 
 export default combineReducers({
   auth,
+  form,
 });
