@@ -8,6 +8,7 @@ import Payment from '../Payment';
 
 class NavBarWrapper extends React.Component {
   render() {
+    const { user, isSignedIn } = this.props;
     const navBarLeftLinks = [
       {
         to: '/',
@@ -16,11 +17,15 @@ class NavBarWrapper extends React.Component {
       },
       { to: '/', key: 'home', content: 'Emaily' },
     ];
+    if (isSignedIn) {
+      navBarLeftLinks.push({ to: '/surveys', key: 'surveys', content: 'Surveys' });
+    }
 
-    const { user } = this.props;
     const { credits } = user || {};
     const navBarRightLinks = [];
-    navBarRightLinks.push({ key: 'payments', content: <Payment /> });
+    if (isSignedIn) {
+      navBarRightLinks.push({ key: 'payments', content: <Payment /> });
+    }
     if (credits !== undefined) {
       navBarRightLinks.push({ key: 'credits', content: `Credits: ${credits}` });
     }
@@ -30,4 +35,6 @@ class NavBarWrapper extends React.Component {
   }
 }
 
-export default connect(state => ({ user: state.auth.user }))(NavBarWrapper);
+export default connect(state => ({ user: state.auth.user, isSignedIn: state.auth.isSignedIn }))(
+  NavBarWrapper,
+);

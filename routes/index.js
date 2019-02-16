@@ -40,8 +40,9 @@ module.exports = app => {
     res.send(user);
   });
 
-  app.get('/api/surveys', authenticate, (req, res) => {
-    res.send(req.user.surveys);
+  app.get('/api/surveys', authenticate, async (req, res) => {
+    const surveys = await Survey.find({ _user: req.user.id }).select({ recipients: false });
+    res.send(surveys);
   });
 
   app.post('/api/surveys', authenticate, requireCredits, async (req, res) => {

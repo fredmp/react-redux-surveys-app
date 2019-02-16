@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
-import { FETCH_USER } from '../actions/types';
+import { FETCH_USER, FETCH_SURVEYS } from '../actions/types';
 
 const AUTH_INITIAL_STATE = {
   user: null,
@@ -18,7 +18,17 @@ const auth = (state = AUTH_INITIAL_STATE, action) => {
   }
 };
 
+const surveys = (state = [], action) => {
+  switch (action.type) {
+    case FETCH_SURVEYS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   auth,
   form,
+  surveys,
 });
