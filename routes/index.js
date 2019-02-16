@@ -4,6 +4,7 @@ const { URL } = require('url');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const stripe = require('stripe')(process.env.STRIPE_SK);
+const mustache = require('mustache');
 const authenticate = require('../middlewares/authenticate');
 const requireCredits = require('../middlewares/requireCredits');
 const Mailer = require('../services/Mailer');
@@ -71,7 +72,14 @@ module.exports = app => {
     }
   });
 
-  app.get('/api/surveys/:surveyId/:choice', (req, res) => res.send('Thanks for voting!'));
+  app.get('/api/surveys/:surveyId/:choice', (req, res) => {
+    const data = {
+      title: 'Emaily',
+      text: 'Thanks for voting!',
+    };
+    const template = '{{title}} - {{text}}';
+    res.send(mustache.to_html(template, data));
+  });
 
   app.post('/api/surveys/webhooks', (req, res) => {
     const pathRegex = new Path('/api/surveys/:surveyId/:choice');
